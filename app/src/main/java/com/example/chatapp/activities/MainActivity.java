@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.widget.Toast;
 
-import com.example.chatapp.R;
 import com.example.chatapp.databinding.ActivityMainBinding;
 import com.example.chatapp.utilities.Constants;
 import com.example.chatapp.utilities.PreferenceManager;
@@ -19,7 +18,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.HashMap;
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,6 +32,11 @@ public class MainActivity extends AppCompatActivity {
         preferenceManager = new PreferenceManager(getApplicationContext());
         loadUserDetails();
         getToken();
+        setListeners();
+    }
+
+    private void setListeners() {
+        binding.imageSignOut.setOnClickListener(v -> signOut());
     }
 
     private void loadUserDetails() {
@@ -68,14 +71,14 @@ public class MainActivity extends AppCompatActivity {
                 database.collection(Constants.KEY_COLLECTION_USERS).document(
                 preferenceManager.getString(Constants.KEY_USER_ID)
         );
-        HashMap<String, Objects> updates = new HashMap<>();
-////        updates.put(Constants.KEY_FCM_TOKEN, FieldValue.delete());
-////        documentReference.update(updates)
-//                .addOnSuccessListener(unused -> {
-//                    preferenceManager.clear();
-//                    startActivity(new Intent(getApplicationContext(), SignUpActivity.class));
-//                    finish();
-//                })
-//                .addOnFailureListener(e -> showToast("Unable to sign out"));
+        HashMap<String, Object> updates = new HashMap<>();
+        updates.put(Constants.KEY_FCM_TOKEN, FieldValue.delete());
+        documentReference.update(updates)
+                .addOnSuccessListener(unused -> {
+                    preferenceManager.clear();
+                    startActivity(new Intent(getApplicationContext(), SignInActivity.class));
+                    finish();
+                })
+                .addOnFailureListener(e -> showToast("Unable to sign out"));
     }
 }
