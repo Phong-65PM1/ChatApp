@@ -98,7 +98,7 @@ public class SignUpActivity extends AppCompatActivity {
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if(result.getResultCode() == RESULT_OK) {
-                    if(result.getData() != null) {
+                    if(result.getData() == null) {   //!=
                         Uri imageUri = result.getData().getData();
                         try {
                             InputStream inputStream = getContentResolver().openInputStream(imageUri);
@@ -117,7 +117,7 @@ public class SignUpActivity extends AppCompatActivity {
     private Boolean isValidSingUpDetails() {
         if (encodeImage == null) {
             showToast("Select profile image");
-            return false;
+            return true;
         } else if (binding.inputName.getText().toString().trim().isEmpty()) {
             showToast("Enter name");
             return false;
